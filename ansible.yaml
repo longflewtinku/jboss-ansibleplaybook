@@ -2,16 +2,22 @@
 - name: installing wildfly(JBOSS)
   become: yes
   hosts: all
+  var:
+    java: openjdk-11-jdk
+    jboss_group: wildfly
+    jboss_user: wildfly
+    jboss_url: https://download.jboss.org/wildfly/22.0.1.Final/wildfly-22.0.1.Final.tar.gz
+    jboss_url_dest:  /tmp/
   tasks:
     - name: installing java
       ansible.builtin.apt:
-        name: openjdk-11-jdk
+        name: "{{ java }}"
         update_cache: yes
         state: present
     - name: downloading jboss url
       ansible.builtin.get_url:
-        url: https://download.jboss.org/wildfly/22.0.1.Final/wildfly-22.0.1.Final.tar.gz
-        dest: /tmp/
+        url: "{{ jboss_url }}"
+        dest: "{{ jboss_url_dest }}"
         mode: '777'
     - name: archiving the tar file
       ansible.builtin.unarchive:
@@ -20,11 +26,11 @@
         remote_src: yes
     - name: Ensure group "somegroup" exists
       ansible.builtin.group:
-        name: wildfly
+        name: "{{ jboss_group }}"
         state: present
     - name: Add the user 'johnd' with a specific uid and a primary group of 'admin'
       ansible.builtin.user:
-        name: wildfly
+        name: "{{ jboss_user }}"
         comment: wildfly
         uid: 2050
         group: wildfly
