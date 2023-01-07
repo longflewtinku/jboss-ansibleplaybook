@@ -37,39 +37,39 @@
     - name: Create Folder
       file: 
         path: /etc/wildfly
-        owner: wildfly
-        group: wildfly
+        owner: "{{ jboss_user }}"
+        group: "{{ jboss_group }}"
         mode: '0777'
         state: directory
     - name: Copy file with owner and permissions
       ansible.builtin.copy:
         src: /opt/wildfly/docs/contrib/scripts/systemd/wildfly.conf
         dest: /etc/wildfly/
-        owner: wildfly
-        group: wildfly
+        owner: "{{ jboss_user }}"
+        group: "{{ jboss_group }}"
         mode: '0777'
         remote_src: yes
     - name: Copy file with owner and permissions
       ansible.builtin.copy:
         src: /opt/wildfly/docs/contrib/scripts/systemd/launch.sh
         dest: /opt/wildfly/bin/
-        owner: wildfly
-        group: wildfly
+        owner: "{{ jboss_user }}"
+        group: "{{ jboss_group }}"
         mode: '0777'
         remote_src: yes
     - name: copying files
       ansible.builtin.copy:
         src: /opt/wildfly/docs/contrib/scripts/systemd/wildfly.service
         dest: /etc/systemd/system/
-        owner: wildfly
-        group: wildfly
+        owner: "{{ jboss_user }}"
+        group: "{{ jboss_group }}"
         remote_src: yes
         mode: '0777'    
     - name: Change file ownership, group and permissions
       ansible.builtin.file:
         path: /opt/wildfly/bin/
-        owner: wildfly  
-        group: wildfly
+        owner: "{{ jboss_user }}"  
+        group: "{{ jboss_group }}"
         mode: '0777'
     - name: ensure the apache service is running and enabled
       ansible.builtin.systemd:
